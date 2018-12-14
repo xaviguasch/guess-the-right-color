@@ -8,8 +8,9 @@ const colors = [
 ]
 
 const squares = document.querySelectorAll(".square")
-const pickedColor = colors[3]
+const pickedColor = pickColor()
 const colorDisplay = document.getElementById("colorDisplay")
+const messageDisplay = document.querySelector("#message")
 
 colorDisplay.textContent = pickedColor
 
@@ -24,9 +25,26 @@ for(let i = 0; i < squares.length; i++) {
 
         //and compare color to picked color
         if (clickedColor === pickedColor) {
-            console.log('we got a winner');      
+            messageDisplay.textContent = 'Correct!'
+            changeColors(clickedColor)
+            
         } else {
-            console.log('wrong');         
+            this.style.backgroundColor = "#232323"
+            messageDisplay.textContent = 'Try again!'      
+
         }
     })
+}
+
+function changeColors(color) {
+    // loop through all squares
+    for(let i = 0; i < squares.length; i++) {
+        // change color to match given color
+        squares[i].style.backgroundColor = color
+    }
+}
+
+function pickColor() {
+    const random = Math.floor(Math.random() * colors.length)
+    return colors[random]
 }
