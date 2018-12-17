@@ -1,28 +1,61 @@
 let numSquares = 6
-let colors = generateRandomColors(numSquares)
+let colors = []
+let pickedColor
 
 const squares = document.querySelectorAll(".square")
-let pickedColor = pickColor()
 const colorDisplay = document.getElementById("colorDisplay")
 const messageDisplay = document.querySelector("#message")
-
 const h1 = document.querySelector("h1")
 const resetButton = document.querySelector("#reset")
 const modeButtons = document.querySelectorAll(".mode")
 
-for(let i = 0; i < modeButtons.length; i++) {
-    modeButtons[i].addEventListener('click', function() {
-        modeButtons[0].classList.remove('selected')
-        modeButtons[1].classList.remove('selected')
-        this.classList.add('selected')
+init()
 
-        this.textContent === 'Easy' ? numSquares = 3 : numSquares = 6
-
-        reset()
-
-
-    })
+function init() {
+    setupModeButtons()
+  
+    setupSquares()
+   
+    reset()
 }
+
+function setupModeButtons() {
+    for(let i = 0; i < modeButtons.length; i++) {
+        modeButtons[i].addEventListener('click', function() {
+            modeButtons[0].classList.remove('selected')
+            modeButtons[1].classList.remove('selected')
+            this.classList.add('selected')
+    
+            this.textContent === 'Easy' ? numSquares = 3 : numSquares = 6
+    
+            reset()
+        })
+    }
+}
+
+function setupSquares() {
+    for(let i = 0; i < squares.length; i++) {
+        // Add click listeners to squares
+        squares[i].addEventListener('click', function() {
+            // Grab color of clicked square 
+            const clickedColor = this.style.backgroundColor
+    
+            //and compare color to picked color
+            if (clickedColor === pickedColor) {
+                messageDisplay.textContent = 'Correct!'
+                resetButton.textContent = 'Play Again?'
+                changeColors(clickedColor)
+                h1.style.backgroundColor = clickedColor
+                
+            } else {
+                this.style.backgroundColor = "#232323"
+                messageDisplay.textContent = 'Try again!'      
+    
+            }
+        })
+    }
+}
+
 
 function reset() {
     colors = generateRandomColors(numSquares)
@@ -48,67 +81,13 @@ function reset() {
 }
 
 
-// easyBtn.addEventListener('click', function() {
-//     hardBtn.classList.remove("selected")
-//     easyBtn.classList.add("selected")  
-//     numSquares = 3
-//     colors = generateRandomColors(numSquares)
-//     pickedColor = pickColor()
-//     colorDisplay.textContent = pickedColor
-
-//     for(let i = 0; i < squares.length; i ++) {
-//         if (colors[i]) {
-//             squares[i].style.background = colors[i]
-//         } else {
-//             squares[i].style.display = "none"
-//         }
-//     }
-
-// })
-// hardBtn.addEventListener('click', function() {
-//     easyBtn.classList.remove("selected")
-//     hardBtn.classList.add("selected")
-//     numSquares = 6 
-//     colors = generateRandomColors(numSquares)
-//     pickedColor = pickColor()
-//     colorDisplay.textContent = pickedColor
-    
-//     for(let i = 0; i < squares.length; i ++) {
-//         squares[i].style.background = colors[i]
-//         squares[i].style.display = "block"
-
-//     }
-// })
 
 resetButton.addEventListener('click', function() {
     reset()
 })
 
-colorDisplay.textContent = pickedColor
 
-for(let i = 0; i < squares.length; i++) {
-    // Add initial colors to squares
-    squares[i].style.backgroundColor = colors[i]
 
-    // Add click listeners to squares
-    squares[i].addEventListener('click', function() {
-        // Grab color of clicked square 
-        const clickedColor = this.style.backgroundColor
-
-        //and compare color to picked color
-        if (clickedColor === pickedColor) {
-            messageDisplay.textContent = 'Correct!'
-            resetButton.textContent = 'Play Again?'
-            changeColors(clickedColor)
-            h1.style.backgroundColor = clickedColor
-            
-        } else {
-            this.style.backgroundColor = "#232323"
-            messageDisplay.textContent = 'Try again!'      
-
-        }
-    })
-}
 
 function changeColors(color) {
     // loop through all squares
@@ -146,7 +125,4 @@ function randomColor() {
     const b = Math.floor(Math.random() * 256)
 
     return `rgb(${r}, ${g}, ${b})`
-
-
-
 }
